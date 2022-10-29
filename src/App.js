@@ -3,20 +3,19 @@ import React, {useState, useEffect} from 'react';
 import Timer from './Timer/Timer';
 
 function App() {
-  const [Break, setBreak] = React.useState(600);
+  const [Break, setBreak] = React.useState(300);
   const [Session, setSession] = React.useState(1500);
 
   const increaseBreak = () => {
-    setBreak(prevBreak => prevBreak + 60);
+    return Break === 3600? Break : setBreak(prevBreak => prevBreak + 60);
   };
 
   const decreaseBreak = () => {
-    if (Break === 5) return Break
-    setBreak(prevBreak => prevBreak - 60);
+    return Break === 60? Break : setBreak(prevBreak => prevBreak - 60);
   };
 
   const increaseSession = () => {
-    setSession(prevSession => prevSession + 60);
+    return Session === 3600? Session : setSession(prevSession => prevSession + 60);
   }
 
   const decreaseSession = () => {
