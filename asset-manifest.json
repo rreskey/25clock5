@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/25clock5/static/css/main.eb975803.css",
+    "main.js": "/25clock5/static/js/main.ff12d085.js",
+    "index.html": "/25clock5/index.html",
+    "main.eb975803.css.map": "/25clock5/static/css/main.eb975803.css.map",
+    "main.ff12d085.js.map": "/25clock5/static/js/main.ff12d085.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.eb975803.css",
+    "static/js/main.ff12d085.js"
+  ]
+}
