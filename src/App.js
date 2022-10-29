@@ -1,23 +1,63 @@
-import logo from './logo.svg';
 import './App.css';
+import React, {useState, useEffect} from 'react';
+import Timer from './Timer/Timer';
 
 function App() {
+  const [Break, setBreak] = React.useState(600);
+  const [Session, setSession] = React.useState(1500);
+
+  const increaseBreak = () => {
+    setBreak(prevBreak => prevBreak + 60);
+  };
+
+  const decreaseBreak = () => {
+    if (Break === 5) return Break
+    setBreak(prevBreak => prevBreak - 60);
+  };
+
+  const increaseSession = () => {
+    setSession(prevSession => prevSession + 60);
+  }
+
+  const decreaseSession = () => {
+    return Session === 300? Session : setSession(prevSession => prevSession - 60);
+  }
+
+  const formatTime = time => {
+    let minutes = Math.floor(time / 60);
+    let seconds = time % 60;
+    return (minutes < 10? `0${minutes}` : minutes) + ':' + (seconds < 10? `0${seconds}` : seconds)
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <div className="wrapper">
+          <div className='container'>
+            <h1>25 + 5 Clock</h1>
+            <div className='length'>
+              <div className='break-length'>
+                <h3>Break length</h3>
+                <div className='adjust'>
+                  <button onClick={decreaseBreak} className='btn btn_adjust'>-</button>
+                  <div className='number'>{formatTime(Break)}</div>
+                  <button onClick={increaseBreak} className='btn btn_adjust'>+</button>
+                </div>
+              </div>
+              <div className='session-length'>
+                <h3>Session length</h3>
+                <div className="adjust">
+                  <button onClick={decreaseSession} className='btn btn_adjust'>-</button>
+                  <div className='number' id='session'>{formatTime(Session)}</div>
+                  <button onClick={increaseSession} className='btn btn_adjust'>+</button>
+                </div>
+              </div>
+            </div>
+            <Timer 
+              session={Session}
+              break_={Break}
+            />
+          </div>
+        </div>
     </div>
   );
 }
