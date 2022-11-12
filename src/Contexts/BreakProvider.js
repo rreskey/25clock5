@@ -8,7 +8,7 @@ export function useBreak() {
 
 export function BreakProvider({ children }) {
     const [Break, setBreak] = useState(300);
-    const [breakMinutes, setBreakMinutes] = useState(5)
+    const [breakMinutes, setBreakMinutes] = useState(1)
     const [breakSeconds, setBreakSeconds] = useState(0)
 
     const increaseBreak = () => {

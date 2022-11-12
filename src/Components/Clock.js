@@ -1,98 +1,67 @@
-import React, { useState, useEffect , useRef, useCallback} from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useBreak } from "../Contexts/BreakProvider";
 import { useSession } from '../Contexts/SessionProvider';
 
 export default function Clock() {
     console.log(' i rendered ')
-    const { breakMinutes, breakSeconds, setBreakMinutes, setBreakSeconds } = useBreak()
-    const { minutes, seconds, setSeconds, setMinutes } = useSession()
+    const { breakMinutes } = useBreak()
+    const { Minutes, Seconds, setSeconds, setMinutes } = useSession()
     const buttons = document.querySelectorAll('.btn_adjust');
 
-    const InitialMinutes = useRef(minutes)
-    const InitialSeconds = useRef(seconds)
-    const InitalBreakMinutes = useRef(breakMinutes)
-    const InitalBreakSeconds = useRef(breakSeconds)
+    const InitialMinutes = useRef(Minutes)
+    const InitialSeconds = useRef(Seconds)
 
-    const [OnBreak, setOnBreak] = useState(false);  
+    const [OnBreak, setOnBreak] = useState(false)
+    const [isStarted, setIsStarted] = useState(false)
 
-    const [isStarted, setIsStarted] = useState(false);
-    
     useEffect(() => {
-        if (isStarted && OnBreak) {
-            let myInterval = setInterval(() => {
-                if (breakSeconds > 0) {
-                    setBreakSeconds(breakSeconds - 1);
-                }
-                if (breakSeconds === 0) {
-                    if (breakMinutes === 0) {
-                        setOnBreak(false)
-                        setMinutes(InitialMinutes.current) 
-                        setMinutes(InitialSeconds.current)
-                        clearInterval(myInterval)
+        if(isStarted) {
+            let interval = setInterval(() => {
+                if (Seconds === 0) {
+                    if (Minutes !== 0) {
+                        setSeconds(59);
+                        setMinutes(Minutes - 1);
                     } else {
-                        setBreakMinutes(breakMinutes - 1);
-                        setBreakSeconds(59);
-                    }
-                } 
-            }, 1000)
-            return ()=> {
-                clearInterval(myInterval);
-              };
-        }
-    }, [breakMinutes, breakSeconds, OnBreak, isStarted])
+                    let minutes = OnBreak ? Minutes : breakMinutes - 1;
+                    let seconds = 5;
+          
+                    setSeconds(seconds);
+                    setMinutes(minutes);
+                    setOnBreak(!OnBreak);
+                  }
+                } else {
+                  setSeconds(Seconds - 1);
+                }
+              }, 1000);
+              return () => { 
+                clearInterval(interval)
+            }
+        }}, [Seconds, isStarted]);
 
-    useEffect(()=>{
-            if (isStarted && !OnBreak) {
-                let myInterval = setInterval(() => {
-                    if (seconds > 0) {
-                        setSeconds(seconds - 1)
-                    }
-                    if (seconds === 0) {
-                        if (minutes === 0) {
-                            setOnBreak(true)
-                            setBreakMinutes(InitalBreakMinutes.current)
-                            setBreakSeconds(InitalBreakSeconds.current)
-                            clearInterval(myInterval)
-                        } else {
-                            setMinutes(minutes - 1)
-                            setSeconds(59)
-                        }
-                    } 
-                }, 1000)
-                return ()=> {
-                    clearInterval(myInterval);
-                  };
-            } 
-    }, [isStarted, minutes, seconds]);
-
-    
     const startCountdown = (isStarted) => {
         buttons.forEach(button => button.disabled = true)
         const startButton = document.querySelector('#startButton')
         startButton.textContent === 'Start'
-        ? startButton.textContent = 'Pause' 
-        : startButton.textContent = 'Start'
+            ? startButton.textContent = 'Pause' 
+            : startButton.textContent = 'Start'
         setIsStarted(isStarted)
     }
-    
+
     const resetCountdown = () => {
         buttons.forEach(button => button.disabled = false)
         document.querySelector('#startButton').textContent = 'Start'
+        setIsStarted(false)
         setOnBreak(false)
         setMinutes(InitialMinutes.current)
         setSeconds(InitialSeconds.current)
-        setBreakMinutes(InitalBreakMinutes.current)
-        setBreakSeconds(InitalBreakSeconds.current)
-        setIsStarted(false)
     }
 
 return (
     <div className="timer">
         <div className="display-session">
-            <h4>Session</h4>
-            { minutes === 0 && seconds === 0
-                ? <h1>{breakMinutes}:{breakSeconds < 10? `0${breakSeconds}` : breakSeconds}</h1>
-                : <h1>{minutes}:{seconds < 10 ?  `0${seconds}` : seconds}</h1>
+            <h4>{OnBreak? 'Break': 'Session'}</h4>
+            { 
+                <h1>{Minutes}:{Seconds < 10 ?  `0${Seconds}` : Seconds}</h1>
             }
         </div>
         <div className="block">
@@ -101,4 +70,4 @@ return (
         </div>
     </div>
   )
-} 
+}

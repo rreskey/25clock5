@@ -8,8 +8,8 @@ export function useSession() {
 
 export function SessionProvider({ children }) {
   const [Session, setSession] = useState(1500);
-  const [minutes, setMinutes] = useState(0)
-  const [seconds, setSeconds] = useState(5)
+  const [Minutes, setMinutes] = useState(0)
+  const [Seconds, setSeconds] = useState(5)
 
   const increaseSession = () => {
     if (Session === 3600) {
@@ -30,7 +30,7 @@ export function SessionProvider({ children }) {
   }
 
   return (
-    <SessionContext.Provider value={{Session, increaseSession, decreaseSession, minutes, seconds, setMinutes, setSeconds}}>
+    <SessionContext.Provider value={{Session, increaseSession, decreaseSession, Minutes, Seconds, setMinutes, setSeconds}}>
       { children }
     </SessionContext.Provider>
   )
